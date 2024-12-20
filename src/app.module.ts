@@ -5,6 +5,8 @@ import { UsersModule } from './users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { SeederModule } from './seeder/seeder.module';
+import { PostModule } from './post/post.module';
+import { CommentModule } from './comment/comment.module';
 
 @Module({
   imports: [
@@ -21,8 +23,10 @@ import { SeederModule } from './seeder/seeder.module';
         synchronize: true,
       }),
     }),
-    UsersModule,
     SeederModule,
+    UsersModule,
+    PostModule,
+    CommentModule,
   ],
   controllers: [AppController],
   providers: [AppService],
