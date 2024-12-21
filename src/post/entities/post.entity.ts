@@ -4,6 +4,8 @@ import {
   Column,
   ManyToOne,
   OneToMany,
+  CreateDateColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Community } from './community.entity';
@@ -30,4 +32,10 @@ export class Post {
     cascade: true,
   })
   comments: Comment[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

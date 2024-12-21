@@ -18,6 +18,7 @@ import { Post as PostEntity } from './entities/post.entity';
 import { JwtAuthGuard } from 'src/guard/jwt-auth.guard';
 import { standardResponse } from 'src/response.util';
 import { PostResponse } from 'src/interface/response.interface';
+import { Community } from './entities/community.entity';
 
 @Controller('post')
 export class PostController {
@@ -52,10 +53,35 @@ export class PostController {
   }
 
   @Get()
-  async getAllPosts(
+  async findAllPosts(
     @Query('communityId') communityId?: number,
   ): Promise<PostResponse<PostEntity[]>> {
     const result = await this.postService.findAll(communityId);
     return standardResponse(200, 'Get posts successfully', result);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('user')
+  async findAllByUser(
+    @Req() req: Request,
+    @Query('communityId') communityId?: number,
+  ): Promise<PostResponse<PostEntity[]>> {
+    const userId = req['user'].id;
+    const result = await this.postService.findAllByUser(userId, communityId);
+    return standardResponse(200, 'Get posts successfully', result);
+  }
+
+  @Get('community')
+  async findAllCommunity(): Promise<PostResponse<Community[]>> {
+    const result = await this.postService.findAllCommunity();
+    return standardResponse(200, 'Get community successfully', result);
+  }
+
+  @Get('postId/:postId')
+  async findByPost(
+    @Param('postId') postId: string,
+  ): Promise<PostResponse<PostEntity>> {
+    const result = await this.postService.findByPost(Number(postId));
+    return standardResponse(200, 'Get post successfully', result);
   }
 }

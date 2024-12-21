@@ -76,11 +76,48 @@ export class PostService {
       return this.postRepository.find({
         where: { community: { id: communityId } },
         relations: ['community', 'user', 'comments'],
+        order: {
+          id: 'DESC',
+        },
       });
     }
 
     return this.postRepository.find({
       relations: ['community', 'user', 'comments'],
+      order: {
+        id: 'DESC',
+      },
     });
+  }
+
+  async findAllByUser(userId: number, communityId?: number): Promise<Post[]> {
+    const conditions: any = { userId };
+
+    if (communityId) {
+      conditions.community = { id: communityId };
+    }
+
+    return this.postRepository.find({
+      where: conditions,
+      relations: ['community', 'user', 'comments'],
+    });
+  }
+
+  async findAllCommunity(): Promise<Community[]> {
+    return await this.communityRepository.find();
+  }
+
+  async findByPost(postId: number): Promise<Post> {
+    const post = await this.postRepository
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.community', 'community')
+      .leftJoinAndSelect('post.user', 'user')
+      .leftJoinAndSelect('post.comments', 'comments')
+      .leftJoinAndSelect('comments.user', 'commentUser')
+      .where('post.id = :postId', { postId })
+      .orderBy('comments.createdAt', 'DESC')
+      .getOne();
+
+    return post;
   }
 }
