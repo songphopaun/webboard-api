@@ -91,8 +91,7 @@ export class PostService {
   }
 
   async findAllByUser(userId: number, communityId?: number): Promise<Post[]> {
-    const conditions: any = { userId };
-
+    const conditions: any = { user: { id: userId } };
     if (communityId) {
       conditions.community = { id: communityId };
     }
@@ -100,6 +99,9 @@ export class PostService {
     return this.postRepository.find({
       where: conditions,
       relations: ['community', 'user', 'comments'],
+      order: {
+        createdAt: 'DESC',
+      },
     });
   }
 
