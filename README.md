@@ -31,3 +31,10 @@ webboard-api/
 ├── package.json # Dependencies and scripts
 ├── tsconfig.json # TypeScript configuration
 └── README.md # Documentation
+
+ENV
+PORT=4000
+NODE_ENV=dev
+DATABASE_URL=postgres://postgres:password@db:5432/webboard
+ACCESS_TOKEN_SECRET=d2pvXK2nV0KjWg
+REFRESH_TOKEN_SECRET=j5Ye&Fd_y5nHXaQA
